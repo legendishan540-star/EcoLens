@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="EcoLens helps you understand e-waste, recyclability, battery concerns and responsible disposal.">
+<title>EcoLens | See Waste. Think Green.</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="nav"><a class="logo" href="#home">🌱 EcoLens</a><nav><a href="#scanner">Scanner</a><a href="#guide">Guide</a><a href="#quiz">Quiz</a><a href="#about">About</a></nav></header>
+<main>
+<section class="hero" id="home"><div><span class="eyebrow">SMART E-WASTE AWARENESS</span><h1>See Waste.<br><span>Think Green.</span></h1><p>Explore whether an item belongs in the e-waste stream and learn how to dispose of it responsibly.</p><a class="btn primary" href="#scanner">Try the Scanner →</a></div><div class="hero-card"><div class="orb">♻️</div><h3>Small choices matter.</h3><p>Repair • Reuse • Recycle</p></div></section>
+<section class="section" id="scanner"><div class="section-heading"><span class="eyebrow">ECOLENS SCANNER</span><h2>Check an item</h2><p>Upload a photo for a preview, then select the item type for an educational EcoLens assessment.</p></div>
+<div class="scanner-grid"><div class="panel"><label class="upload-box" for="imageInput"><div id="previewWrap" class="preview-wrap hidden"><img id="preview" alt="Uploaded item preview"></div><div id="uploadPrompt"><div class="upload-icon">📷</div><strong>Upload an image</strong><span>PNG, JPG or WEBP • up to 5 MB</span></div></label><input id="imageInput" type="file" accept="image/*" hidden>
+<label class="field-label" for="itemType">What is the item?</label><select id="itemType">
+<option value="smartphone">📱 Smartphone</option><option value="laptop">💻 Laptop</option><option value="battery">🔋 Battery</option><option value="charger">🔌 Charger</option><option value="television">📺 Television</option><option value="keyboard">⌨️ Keyboard</option><option value="headphones">🎧 Headphones</option><option value="other">🌱 Non-electronic item</option></select>
+<button class="btn primary full" id="analyzeBtn">Analyze Item</button></div>
+<div class="panel result-panel"><div class="result-empty" id="emptyState"><div class="big-icon">🔎</div><h3>Your result will appear here</h3><p>Select an item and click Analyze Item.</p></div>
+<div id="resultContent" class="hidden"><div class="result-title"><span id="resultIcon" class="result-icon">📱</span><div><span id="classification" class="badge">E-WASTE</span><h3 id="resultName">Smartphone</h3></div></div><p id="description" class="result-description"></p>
+<div class="stats"><div><span>⚠️ Risk estimate</span><strong id="risk">72</strong><small>/100</small></div><div><span>♻️ Recyclability</span><strong id="recycle">81%</strong></div><div><span>🔋 Battery</span><strong id="battery">Likely</strong></div><div><span>📦 Category</span><strong id="category">Electronics</strong></div></div>
+<div class="recommendation"><strong>🌱 Responsible disposal</strong><p id="recommendation"></p></div></div></div></div>
+<p class="disclaimer">EcoLens provides an educational preliminary risk estimate. Actual material composition and hazard level can vary by product.</p></section>
+<section class="section alt" id="guide"><div class="section-heading"><span class="eyebrow">LEARN</span><h2>E-Waste Guide</h2></div><div class="cards">
+<article class="info-card"><span>📱</span><h3>Electronics</h3><p>Phones, laptops and other electronic devices can contain recoverable materials and should enter appropriate e-waste streams.</p></article>
+<article class="info-card"><span>🔋</span><h3>Batteries</h3><p>Batteries need separate, responsible collection. Avoid mixing them with ordinary household waste.</p></article>
+<article class="info-card"><span>♻️</span><h3>Reuse First</h3><p>Repair, reuse or donate working electronics before recycling them whenever practical.</p></article></div></section>
+<section class="section quiz-section" id="quiz"><div class="quiz-card"><span class="eyebrow">QUICK QUIZ</span><h2>Is an old smartphone e-waste?</h2><div class="quiz-buttons"><button class="quiz-btn" data-answer="true">Yes, it is</button><button class="quiz-btn" data-answer="false">No, it isn't</button></div><p id="quizMessage" class="quiz-message"></p></div></section>
+<section class="section about" id="about"><span class="eyebrow">ABOUT ECOLENS</span><h2>Technology with an environmental purpose.</h2><p>EcoLens is an educational prototype designed to make e-waste awareness simple, visual and accessible.</p></section>
+</main><footer>🌱 <strong>EcoLens</strong> — See Waste. Think Green.</footer><script src="script.js"></script></body></html>
