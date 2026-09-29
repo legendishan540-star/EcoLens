@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37614.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcoLens.AppHost", "EcoLens.AppHost\EcoLens.AppHost.csproj", "{F2EF4517-0988-4682-A1E3-1E4E8F51E537}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcoLens.ServiceDefaults", "EcoLens.ServiceDefaults\EcoLens.ServiceDefaults.csproj", "{F2927EE0-DD74-E23F-4A5A-6134E8655772}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcoLens.ApiService", "EcoLens.ApiService\EcoLens.ApiService.csproj", "{0BB0489E-3315-CBC9-86AD-53270354D66B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcoLens.Web", "EcoLens.Web\EcoLens.Web.csproj", "{A252223C-4AB8-1D1E-FDB8-DE8362139F46}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F2EF4517-0988-4682-A1E3-1E4E8F51E537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EF4517-0988-4682-A1E3-1E4E8F51E537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EF4517-0988-4682-A1E3-1E4E8F51E537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EF4517-0988-4682-A1E3-1E4E8F51E537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2927EE0-DD74-E23F-4A5A-6134E8655772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2927EE0-DD74-E23F-4A5A-6134E8655772}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2927EE0-DD74-E23F-4A5A-6134E8655772}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2927EE0-DD74-E23F-4A5A-6134E8655772}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BB0489E-3315-CBC9-86AD-53270354D66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BB0489E-3315-CBC9-86AD-53270354D66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BB0489E-3315-CBC9-86AD-53270354D66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BB0489E-3315-CBC9-86AD-53270354D66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A252223C-4AB8-1D1E-FDB8-DE8362139F46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A252223C-4AB8-1D1E-FDB8-DE8362139F46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A252223C-4AB8-1D1E-FDB8-DE8362139F46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A252223C-4AB8-1D1E-FDB8-DE8362139F46}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0244F57-6EA4-4607-85B5-10A5029856A4}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,626 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>EcoLens | Smart E-Waste Awareness</PageTitle>
+
+<div class="ecolens">
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo">
+            🌱 <span>EcoLens</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#scanner">Scanner</a>
+            <a href="#guide">Guide</a>
+            <a href="#quiz">Quiz</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+
+    <!-- HERO -->
+    <section id="home" class="hero">
+
+        <div class="hero-content">
+
+            <div class="tagline">
+                🌍 TECHNOLOGY FOR A CLEANER FUTURE
+            </div>
+
+            <h1>
+                See Waste.<br />
+                <span>Think Green.</span>
+            </h1>
+
+            <p>
+                EcoLens helps people understand whether an item
+                should be treated as electronic waste and how it
+                can be handled responsibly.
+            </p>
+
+            <a href="#scanner" class="primary-button">
+                🔍 Start Scanning
+            </a>
+
+        </div>
+
+        <div class="hero-card">
+
+            <div class="scan-icon">
+                📷
+            </div>
+
+            <h2>EcoLens Scanner</h2>
+
+            <p>
+                Upload an item and get a quick environmental assessment.
+            </p>
+
+            <div class="mini-status">
+                <span>●</span> Ready to scan
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SCANNER -->
+    <section id="scanner" class="section">
+
+        <div class="section-heading">
+
+            <div class="small-title">
+                ECO SCANNER
+            </div>
+
+            <h2>Analyze an Item</h2>
+
+            <p>
+                Upload a picture and select what you are scanning.
+            </p>
+
+        </div>
+
+
+        <div class="scanner">
+
+            <!-- IMAGE UPLOAD -->
+
+            <div class="upload-panel">
+
+                <h3>📷 Item Image</h3>
+
+                <div class="image-box">
+
+                    @if (imagePreview != null)
+                    {
+                        <img src="@imagePreview"
+                             alt="Uploaded item"
+                             class="preview-image" />
+                    }
+                    else
+                    {
+                        <div class="empty-image">
+                            <div>📷</div>
+                            <span>No image selected</span>
+                        </div>
+                    }
+
+                </div>
+
+                <label class="upload-button">
+
+                    📁 Upload Image
+
+                    <InputFile OnChange="HandleFileSelected"
+                               accept="image/*"
+                               class="file-input" />
+
+                </label>
+
+            </div>
+
+
+            <!-- ANALYSIS -->
+
+            <div class="analysis-panel">
+
+                <h3>🔍 Item Analysis</h3>
+
+                <label>Select the item</label>
+
+                <select @bind="selectedItem">
+
+                    <option value="smartphone">📱 Smartphone</option>
+                    <option value="laptop">💻 Laptop</option>
+                    <option value="battery">🔋 Battery</option>
+                    <option value="charger">🔌 Charger</option>
+                    <option value="television">📺 Television</option>
+                    <option value="keyboard">⌨️ Keyboard</option>
+                    <option value="headphones">🎧 Headphones</option>
+                    <option value="plastic">🧴 Plastic Bottle</option>
+                    <option value="paper">📄 Paper</option>
+                    <option value="food">🍎 Food Waste</option>
+
+                </select>
+
+                <button class="analyze-button"
+                        @onclick="AnalyzeItem">
+
+                    🔍 Analyze Item
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        @if (showResult)
+        {
+            <div class="result">
+
+                <div class="result-icon">
+                    @resultIcon
+                </div>
+
+                <div class="result-header">
+
+                    <div>
+                        <div class="small-title">ANALYSIS RESULT</div>
+
+                        <h2>@resultName</h2>
+                    </div>
+
+                    <div class="classification">
+                        @classification
+                    </div>
+
+                </div>
+
+
+                <p class="result-description">
+                    @description
+                </p>
+
+
+                <div class="result-grid">
+
+                    <div class="result-card">
+                        <span>Environmental Risk</span>
+                        <strong>@hazardRisk / 100</strong>
+                    </div>
+
+                    <div class="result-card">
+                        <span>Recyclability</span>
+                        <strong>@recyclability</strong>
+                    </div>
+
+                    <div class="result-card">
+                        <span>Battery Concern</span>
+                        <strong>@battery</strong>
+                    </div>
+
+                    <div class="result-card">
+                        <span>Eco Category</span>
+                        <strong>@category</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="recommendation">
+
+                    <h3>♻️ Recommended Action</h3>
+
+                    <p>
+                        @recommendation
+                    </p>
+
+                </div>
+
+                <div class="disclaimer">
+                    ℹ️ EcoLens provides an educational preliminary
+                    risk estimate. Actual material composition and
+                    hazard level can vary by product.
+                </div>
+
+            </div>
+        }
+
+    </section>
+
+
+    <!-- GUIDE -->
+
+    <section id="guide" class="section guide-section">
+
+        <div class="section-heading">
+
+            <div class="small-title">
+                KNOW YOUR WASTE
+            </div>
+
+            <h2>E-Waste Guide</h2>
+
+            <p>
+                Common electronic items and why responsible disposal matters.
+            </p>
+
+        </div>
+
+
+        <div class="guide-grid">
+
+            <div class="guide-card">
+                <div class="guide-icon">📱</div>
+                <h3>Smartphones</h3>
+                <p>
+                    Can contain batteries, circuit boards,
+                    metals and other electronic components.
+                </p>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-icon">💻</div>
+                <h3>Laptops</h3>
+                <p>
+                    Contain electronic components and
+                    valuable recoverable materials.
+                </p>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-icon">🔋</div>
+                <h3>Batteries</h3>
+                <p>
+                    Need special handling and should not
+                    simply be mixed with general waste.
+                </p>
+            </div>
+
+            <div class="guide-card">
+                <div class="guide-icon">🔌</div>
+                <h3>Chargers</h3>
+                <p>
+                    Contain wires, plastics and electronic
+                    components that can be recovered.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUIZ -->
+
+    <section id="quiz" class="section">
+
+        <div class="section-heading">
+
+            <div class="small-title">
+                TEST YOUR KNOWLEDGE
+            </div>
+
+            <h2>Eco Quiz 🧠</h2>
+
+        </div>
+
+
+        <div class="quiz">
+
+            <h3>
+                Which of these is electronic waste?
+            </h3>
+
+            <button @onclick="() => CheckAnswer(false)">
+                🍎 Apple
+            </button>
+
+            <button @onclick="() => CheckAnswer(true)">
+                📱 Old Smartphone
+            </button>
+
+            <button @onclick="() => CheckAnswer(false)">
+                📄 Newspaper
+            </button>
+
+            <button @onclick="() => CheckAnswer(false)">
+                🍌 Banana Peel
+            </button>
+
+            @if (quizAnswered)
+            {
+                <div class="quiz-result @quizClass">
+                    @quizMessage
+                </div>
+            }
+
+        </div>
+
+    </section>
+
+
+    <!-- ABOUT -->
+
+    <section id="about" class="section about">
+
+        <div class="about-box">
+
+            <div class="small-title">
+                ABOUT ECOLENS
+            </div>
+
+            <h2>
+                Small actions can create a cleaner future.
+            </h2>
+
+            <p>
+                EcoLens is a student project designed to increase
+                awareness about electronic waste and encourage
+                responsible reuse, repair and recycling.
+            </p>
+
+            <p>
+                It demonstrates how technology can make environmental
+                information easier to understand and act upon.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-logo">
+            🌱 EcoLens
+        </div>
+
+        <p>
+            Scan • Understand • Act
+        </p>
+
+        <small>
+            © 2026 EcoLens NCSC Project
+        </small>
+
+    </footer>
+
+</div>
+
+
+@code {
+
+    private string selectedItem = "smartphone";
+
+    private bool showResult = false;
+
+    private string? imagePreview;
+
+    private string resultIcon = "⚠️";
+    private string resultName = "";
+    private string classification = "";
+    private string description = "";
+    private string hazardRisk = "";
+    private string recyclability = "";
+    private string battery = "";
+    private string category = "";
+    private string recommendation = "";
+
+    private bool quizAnswered = false;
+    private string quizMessage = "";
+    private string quizClass = "";
+
+
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        if (file == null)
+            return;
+
+        using var stream = file.OpenReadStream(5 * 1024 * 1024);
+
+        using var memoryStream = new MemoryStream();
+
+        await stream.CopyToAsync(memoryStream);
+
+        var bytes = memoryStream.ToArray();
+
+        imagePreview =
+            $"data:{file.ContentType};base64,{Convert.ToBase64String(bytes)}";
+    }
+
+
+    private void AnalyzeItem()
+    {
+        showResult = true;
+
+        switch (selectedItem)
+        {
+            case "smartphone":
+
+                resultIcon = "📱";
+                resultName = "Smartphone";
+                classification = "E-WASTE";
+                hazardRisk = "72";
+                recyclability = "81%";
+                battery = "Likely";
+                category = "Electronics";
+
+                description =
+                    "A smartphone is electronic waste when it is no longer usable or wanted.";
+
+                recommendation =
+                    "Consider repair, reuse or donation first. If it cannot be reused, send it through an appropriate e-waste recycling channel.";
+
+                break;
+
+
+            case "laptop":
+
+                resultIcon = "💻";
+                resultName = "Laptop";
+                classification = "E-WASTE";
+                hazardRisk = "68";
+                recyclability = "84%";
+                battery = "Yes";
+                category = "Computing";
+
+                description =
+                    "Laptops contain electronic components, batteries and valuable recoverable materials.";
+
+                recommendation =
+                    "Back up and remove personal data, then use an appropriate e-waste collection or recycling service.";
+
+                break;
+
+
+            case "battery":
+
+                resultIcon = "🔋";
+                resultName = "Battery";
+                classification = "SPECIAL WASTE";
+                hazardRisk = "90";
+                recyclability = "95%";
+                battery = "Yes";
+                category = "Battery";
+
+                description =
+                    "Batteries require careful handling and should not simply be mixed with general household waste.";
+
+                recommendation =
+                    "Use an appropriate battery collection or recycling channel.";
+
+                break;
+
+
+            case "charger":
+
+                resultIcon = "🔌";
+                resultName = "Charger";
+                classification = "E-WASTE";
+                hazardRisk = "45";
+                recyclability = "75%";
+                battery = "Usually No";
+                category = "Accessory";
+
+                description =
+                    "Chargers contain wires, plastics and electronic components.";
+
+                recommendation =
+                    "Reuse if working. Otherwise place it into an appropriate e-waste recycling stream.";
+
+                break;
+
+
+            case "television":
+
+                resultIcon = "📺";
+                resultName = "Television";
+                classification = "E-WASTE";
+                hazardRisk = "70";
+                recyclability = "78%";
+                battery = "Usually No";
+                category = "Display";
+
+                description =
+                    "Televisions contain multiple electronic and material components.";
+
+                recommendation =
+                    "Do not dispose of an old television with general household waste. Use an appropriate e-waste recycler.";
+
+                break;
+
+
+            case "keyboard":
+
+                resultIcon = "⌨️";
+                resultName = "Keyboard";
+                classification = "E-WASTE";
+                hazardRisk = "30";
+                recyclability = "70%";
+                battery = "No";
+                category = "Peripheral";
+
+                description =
+                    "A keyboard contains electronic components and plastic materials.";
+
+                recommendation =
+                    "Reuse or donate when possible. Otherwise use an appropriate e-waste recycling channel.";
+
+                break;
+
+
+            case "headphones":
+
+                resultIcon = "🎧";
+                resultName = "Headphones";
+                classification = "E-WASTE";
+                hazardRisk = "35";
+                recyclability = "65%";
+                battery = "Depends";
+                category = "Audio";
+
+                description =
+                    "Electronic headphones can contain wires, circuits and sometimes rechargeable batteries.";
+
+                recommendation =
+                    "Reuse or repair when possible. Dispose of electronic headphones through an appropriate recycling channel.";
+
+                break;
+
+
+            default:
+
+                resultIcon = "🌱";
+                resultName = "Non-Electronic Waste";
+                classification = "NOT E-WASTE";
+                hazardRisk = "Low";
+                recyclability = "Varies";
+                battery = "No";
+                category = "General Waste";
+
+                description =
+                    "This selected item is not normally classified as electronic waste.";
+
+                recommendation =
+                    "Use the appropriate waste or recycling stream for this material.";
+
+                break;
+        }
+    }
+
+
+    private void CheckAnswer(bool correct)
+    {
+        quizAnswered = true;
+
+        if (correct)
+        {
+            quizMessage =
+                "✅ Correct! An old smartphone is electronic waste.";
+
+            quizClass = "correct";
+        }
+        else
+        {
+            quizMessage =
+                "❌ Not quite. Try again!";
+
+            quizClass = "wrong";
+        }
+    }
+
+}
