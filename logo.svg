@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" role="img" aria-labelledby="title desc">
+<title id="title">EcoLens</title><desc id="desc">Dark aura EcoLens logo with phone, magnifying glass, recycling symbol and leaves.</desc>
+<defs>
+ <radialGradient id="bg"><stop stop-color="#123d2b"/><stop offset="1" stop-color="#06130f"/></radialGradient>
+ <linearGradient id="g" x1="0" x2="1"><stop stop-color="#42f58a"/><stop offset="1" stop-color="#a8ff5d"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="800" height="260" rx="58" fill="url(#bg)"/>
+<circle cx="126" cy="130" r="91" fill="#071b13" stroke="#42f58a" stroke-opacity=".35" stroke-width="3"/>
+<circle cx="126" cy="130" r="74" fill="none" stroke="#42f58a" stroke-opacity=".15"/>
+<g filter="url(#glow)" fill="none" stroke="url(#g)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+ <rect x="82" y="72" width="64" height="105" rx="11"/>
+ <path d="M103 163h22"/>
+ <circle cx="161" cy="101" r="30"/>
+ <path d="m183 123 21 21"/>
+ <path d="M105 54c12-15 27-18 41-14-4 14-15 24-31 27"/>
+ <path d="M157 185c16 4 29 0 38-11-15-7-28-4-38 11"/>
+</g>
+<g fill="url(#g)" font-family="Arial, sans-serif">
+ <text x="255" y="115" font-size="62" font-weight="900" letter-spacing="4">ECO LENS</text>
+ <text x="258" y="153" font-size="20" font-weight="700" letter-spacing="4">IDENTIFY • SEGREGATE • DISPOSE</text>
+ <text x="258" y="190" font-size="15" opacity=".72" letter-spacing="5">A GREENER TOMORROW</text>
+</g>
+<path d="M45 130h162" stroke="#42f58a" stroke-opacity=".12"/>
+</svg>

@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://legendishan540-star.github.io/EcoLens/sitemap.xml

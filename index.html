@@ -1,15 +1,337 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EcoLens — Identify • Segregate • Dispose</title><meta name="description" content="EcoLens e-waste awareness, experimental scanner, testing lab, quiz and recycling guide."><meta name="robots" content="index,follow"><link rel="canonical" href="https://legendishan540-star.github.io/EcoLens/"><link rel="icon" href="logo.png"><link rel="stylesheet" href="style.css"></head><body>
-<div class="glow g1"></div><div class="glow g2"></div><header><a class="brand" href="#home"><img src="logo.png"><span><b>Eco</b>Lens<small>Identify • Segregate • Dispose</small></span></a><button id="menu">☰</button><nav id="nav"><a href="#home">Home</a><a href="#scanner">Scan</a><a href="#lab">Experiment</a><a href="#dashboard">Dashboard</a><a href="#guide">Guide</a><a href="#quiz">Quiz</a><a href="#about">About</a></nav></header>
-<main>
-<section id="home" class="hero wrap"><div><label>🌱 E-WASTE AWARENESS • NCSC EXPERIMENT</label><h1>See Waste.<br><em>Think Green.</em></h1><p>Identify everyday waste, learn responsible disposal, run controlled tests and turn results into useful evidence.</p><div class="actions"><a class="btn main" href="#scanner">📷 Scan Waste</a><a class="btn" href="#lab">🧪 Experiment Lab</a></div><div class="pills"><span>🔒 Browser-first</span><span>📊 Testable</span><span>♻️ Education focused</span></div></div><div class="heroLogo"><img src="logo.png"><div class="bubble b1">📱 Live camera</div><div class="bubble b2">🧪 Test history</div><div class="bubble b3">🌱 Eco points</div></div></section>
-<section class="stats"><div><b id="sTests">0</b><small>Tests</small></div><div><b id="sCorrect">0</b><small>Correct</small></div><div><b id="sAcc">0%</b><small>Accuracy</small></div><div><b id="sPoints">0</b><small>Eco points</small></div></section>
-<section id="scanner" class="wrap section"><div class="head"><div><label>01 / SCAN WASTE</label><h2>Live camera + upload</h2></div><p>Capture or upload an image. The prototype uses a limited category-assisted system rather than claiming unsupported AI confidence.</p></div><div class="two"><div class="card"><div class="camera"><video id="video" autoplay playsinline muted></video><img id="preview"><div id="placeholder">📷<strong>Camera ready</strong><small>Start the camera or upload a photo</small></div></div><div class="actions"><button class="btn main" id="start">Start Camera</button><button class="btn" id="capture" disabled>📸 Capture</button><button class="btn" id="stop" disabled>Stop</button></div><label class="upload">🖼️ Upload Image<input id="file" type="file" accept="image/*"></label><span id="filename">No image selected</span><p class="tiny">🔒 Images stay in your browser in this prototype.</p></div><div class="card"><h3>🧠 Experimental Identifier</h3><p class="muted">Choose the category being tested.</p><select id="item"></select><button class="btn main wide" id="identify">Identify Item →</button><div class="notice"><b>Identification mode</b><strong>Experimental / category-assisted</strong><small>No confidence score is shown because this prototype does not calculate one.</small></div><div class="pills"><span>♻️ E-waste</span><span>🗑️ Other waste</span><span>🧪 Testable</span></div></div></div>
-<div id="result" class="card result hidden"><img id="resultImg"><div><label>ANALYSIS RESULT</label><h2 id="resultTitle"></h2><div class="resultGrid"><div><small>Category</small><b id="rCat"></b></div><div><small>Action</small><b id="rAction"></b></div><div><small>Disposal</small><b id="rDisposal"></b></div><div><small>Method</small><b>Experimental category-assisted test</b></div></div><div class="actions"><button class="btn main" id="save">🧪 Save to Lab</button><button class="btn" id="again">↻ Scan Again</button></div></div></div></section>
-<section id="lab" class="wrap section"><div class="head"><div><label>02 / NCSC EXPERIMENT LAB</label><h2>Turn tests into evidence</h2></div><p>Record the actual item and compare it with the app prediction.</p></div><div class="two"><div class="card"><h3>🧪 Record a test</h3><label>Actual item</label><select id="actual"></select><label>App prediction</label><select id="prediction"></select><label>Test note</label><textarea id="note" rows="3" placeholder="Lighting, angle, object condition, etc."></textarea><button class="btn main wide" id="record">Record Test</button></div><div class="card center"><div class="big">📊</div><h3>Build your dataset</h3><p class="muted">Every test stores the actual item, prediction, image and result locally so you can analyse performance.</p><div class="notice"><b>Accuracy</b><strong>Correct ÷ Total × 100</strong><small>This is experimental data, not a guarantee of real-world AI accuracy.</small></div></div></div></section>
-<section id="dashboard" class="wrap section"><div class="head"><div><label>03 / TESTING DASHBOARD</label><h2>Your experiment data</h2></div><p>Review, clear or export your local test dataset.</p></div><div class="metrics"><div class="card"><b id="dTotal">0</b><small>Total tests</small></div><div class="card"><b id="dCorrect">0</b><small>Correct</small></div><div class="card"><b id="dWrong">0</b><small>Incorrect</small></div><div class="card"><b id="dAcc">0%</b><small>Accuracy</small></div></div><div class="card tableCard"><div class="toolbar"><h3>Test history</h3><div><button class="btn small" id="export">📥 Export CSV</button><button class="btn small danger" id="clear">Clear History</button></div></div><div class="tableWrap"><table><thead><tr><th>Date</th><th>Image</th><th>Actual</th><th>Prediction</th><th>Result</th><th>Note</th></tr></thead><tbody id="history"><tr><td colspan="6" class="empty">No tests yet.</td></tr></tbody></table></div></div></section>
-<section id="guide" class="wrap section"><div class="head"><div><label>04 / KNOWLEDGE HUB</label><h2>E-waste guide</h2></div><p>Learn what to do with common items and why responsible handling matters.</p></div><div class="search"><span>🔎</span><input id="search" placeholder="Search the guide..."></div><div class="grid" id="guides"></div></section>
-<section id="impact" class="wrap section"><div class="head"><div><label>05 / IMPACT CALCULATOR</label><h2>Your electronics footprint</h2></div><p>Educational estimate only — not a scientific lifecycle assessment.</p></div><div class="card impact"><div class="inputs"><label>Old phones<input id="phones" type="number" min="0" value="0"></label><label>Old laptops<input id="laptops" type="number" min="0" value="0"></label><label>Other electronics<input id="other" type="number" min="0" value="0"></label><button class="btn main" id="calc">Calculate Impact</button></div><div><b class="impactNum" id="impactNum">0</b><small>devices counted</small><div class="bars"><i id="pb"></i><i id="lb"></i><i id="ob"></i></div><p class="muted" id="impactText">Enter your old electronics.</p></div></div></section>
-<section id="quiz" class="wrap section"><div class="head"><div><label>06 / MEGA QUIZ</label><h2>15-question Eco Challenge</h2></div><p>Test your knowledge and earn Eco points.</p></div><div class="card quiz"><div class="quizTop"><span id="qCount"></span><i><b id="qBar"></b></i><span id="qScore">0 pts</span></div><div id="qArea"></div><div id="qEnd" class="hidden"></div></div></section>
-<section id="challenges" class="wrap section"><div class="head"><div><label>07 / ECO CHALLENGES</label><h2>Small actions, real habits</h2></div></div><div class="grid four" id="challengeGrid"></div></section>
-<section id="about" class="wrap section about"><img src="logo.png"><div><label>ABOUT ECOLENS</label><h2>Identify • Segregate • Dispose</h2><p>EcoLens is a student-focused e-waste awareness and experimentation platform. It deliberately uses a limited testable classification system and does not pretend to recognise everything.</p><div class="notice">⚠️ <b>Prototype note:</b> Follow local authorised waste-management guidance for actual disposal.</div></div></section>
-</main><footer><img src="logo.png"><b>EcoLens</b><p>Identify • Segregate • Dispose • A Greener Tomorrow 🌱</p></footer><script src="script.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLens — See Waste. Think Green.</title>
+  <meta name="description" content="EcoLens is an educational e-waste awareness and experimentation website: identify, segregate, dispose responsibly, and record classification tests." />
+  <meta name="theme-color" content="#071a14" />
+  <meta property="og:title" content="EcoLens — See Waste. Think Green." />
+  <meta property="og:description" content="Identify • Segregate • Dispose" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-glow glow-a"></div>
+  <div class="bg-glow glow-b"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="EcoLens home">
+        <img src="logo.svg" alt="EcoLens logo" />
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open navigation">☰</button>
+      <nav id="nav">
+        <a href="#scanner">Scanner</a>
+        <a href="#experiment">Experiment</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#guide">Guide</a>
+        <a href="#impact">Impact</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">♻️ NCSC E-WASTE AWARENESS PROJECT</span>
+          <h1>See Waste.<br><span>Think Green.</span></h1>
+          <p class="hero-text">
+            EcoLens helps you explore waste categories, learn responsible disposal,
+            and run transparent classification experiments without pretending that a
+            prototype is a full AI system.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#scanner">🔎 Scan Waste</a>
+            <a class="btn btn-ghost" href="#experiment">🧪 Open Experiment Lab</a>
+          </div>
+          <div class="hero-note">Identify • Segregate • Dispose</div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="orb">
+            <div class="orb-ring"></div>
+            <div class="orb-core">♻</div>
+          </div>
+          <div class="float-card fc-one"><b>7</b><small>test categories</small></div>
+          <div class="float-card fc-two"><b>100%</b><small>transparent prototype</small></div>
+          <div class="float-card fc-three"><b>CSV</b><small>export your trials</small></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-strip">
+      <div class="container stats">
+        <div><strong>7</strong><span>starter categories</span></div>
+        <div><strong id="testsCount">0</strong><span>experiments saved</span></div>
+        <div><strong id="accuracyStat">—</strong><span>recorded accuracy</span></div>
+        <div><strong id="pointsStat">0</strong><span>Eco Points</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="scanner">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">01 · SCANNER</span>
+          <h2>Explore a waste item</h2>
+          <p>Upload a photo or use your camera. Select the prototype category you want to test.</p>
+        </div>
+
+        <div class="scanner-grid">
+          <div class="glass-card scanner-card">
+            <div class="media-box" id="mediaBox">
+              <div class="media-placeholder" id="mediaPlaceholder">
+                <div class="big-icon">📷</div>
+                <h3>No image selected</h3>
+                <p>Upload an image or start the camera.</p>
+              </div>
+              <video id="cameraVideo" autoplay playsinline hidden></video>
+              <img id="previewImage" alt="Selected waste item preview" hidden />
+              <canvas id="captureCanvas" hidden></canvas>
+            </div>
+
+            <div class="scanner-controls">
+              <label class="upload-btn">
+                📁 Upload Image
+                <input type="file" id="imageInput" accept="image/*" hidden />
+              </label>
+              <button class="btn btn-ghost" id="cameraBtn">📹 Start Camera</button>
+              <button class="btn btn-ghost" id="captureBtn" hidden>📸 Capture</button>
+            </div>
+
+            <div class="field-row">
+              <label>
+                Experimental prediction
+                <select id="predictionSelect">
+                  <option value="battery">Battery</option>
+                  <option value="charger">Charger</option>
+                  <option value="phone">Mobile phone</option>
+                  <option value="cable">Cable</option>
+                  <option value="plastic">Plastic bottle</option>
+                  <option value="paper">Paper</option>
+                  <option value="organic">Organic / wet waste</option>
+                </select>
+              </label>
+            </div>
+
+            <button class="btn btn-primary full" id="identifyBtn">🔍 Identify for Experiment</button>
+            <p class="micro-note">Prototype note: this static version does not claim to perform AI image recognition. The selected category is recorded as the app prediction for NCSC experimentation.</p>
+          </div>
+
+          <div class="glass-card result-card" id="resultCard">
+            <div class="result-top">
+              <span class="status-pill">RESULT</span>
+              <span id="resultCategoryPill">E-WASTE</span>
+            </div>
+            <div class="result-icon" id="resultIcon">🔋</div>
+            <h3 id="resultTitle">Battery</h3>
+            <p id="resultAction">Keep separate from regular household waste.</p>
+            <div class="result-grid">
+              <div><span>Category</span><b id="resultCategory">E-Waste</b></div>
+              <div><span>Battery concern</span><b id="resultBattery">Yes</b></div>
+              <div><span>Recyclability</span><b id="resultRecycle">High</b></div>
+              <div><span>Risk level</span><b id="resultRisk">High</b></div>
+            </div>
+            <div class="tip-box" id="resultTip">♻️ Follow your local authorised e-waste collection system.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="experiment">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">02 · NCSC EXPERIMENT LAB</span>
+          <h2>Turn tests into evidence</h2>
+          <p>Record what the app predicted, what the item actually was, and whether the prediction was correct.</p>
+        </div>
+
+        <div class="experiment-grid">
+          <div class="glass-card">
+            <div class="lab-icon">🧪</div>
+            <h3>Record a trial</h3>
+            <p class="muted">Use the scanner above, then compare the prediction with the actual item.</p>
+            <div class="field-row two">
+              <label>Actual item
+                <select id="actualSelect">
+                  <option value="battery">Battery</option>
+                  <option value="charger">Charger</option>
+                  <option value="phone">Mobile phone</option>
+                  <option value="cable">Cable</option>
+                  <option value="plastic">Plastic bottle</option>
+                  <option value="paper">Paper</option>
+                  <option value="organic">Organic / wet waste</option>
+                </select>
+              </label>
+              <label>Prediction
+                <select id="labPredictionSelect">
+                  <option value="battery">Battery</option>
+                  <option value="charger">Charger</option>
+                  <option value="phone">Mobile phone</option>
+                  <option value="cable">Cable</option>
+                  <option value="plastic">Plastic bottle</option>
+                  <option value="paper">Paper</option>
+                  <option value="organic">Organic / wet waste</option>
+                </select>
+              </label>
+            </div>
+            <label class="check-row">
+              <input type="checkbox" id="useScannerPrediction" checked />
+              <span>Use the scanner's selected prediction</span>
+            </label>
+            <button class="btn btn-primary full" id="recordBtn">＋ Record Experiment</button>
+          </div>
+
+          <div class="glass-card lab-info">
+            <span class="mini-label">WHY IT MATTERS</span>
+            <h3>Measure, don't exaggerate.</h3>
+            <p>
+              A school prototype becomes more useful when its limitations are visible.
+              These records let you calculate simple accuracy from your own test set.
+            </p>
+            <div class="mini-stats">
+              <div><b id="correctCount">0</b><span>correct</span></div>
+              <div><b id="incorrectCount">0</b><span>incorrect</span></div>
+              <div><b id="totalCount">0</b><span>total</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="dashboard">
+      <div class="container">
+        <div class="section-heading inline-heading">
+          <div>
+            <span class="eyebrow">03 · TEST DASHBOARD</span>
+            <h2>Your experiment history</h2>
+          </div>
+          <button class="btn btn-ghost" id="exportBtn">⬇ Export CSV</button>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="glass-card accuracy-card">
+            <span class="mini-label">RECORDED ACCURACY</span>
+            <div class="accuracy-ring"><span id="accuracyBig">—</span></div>
+            <p>Calculated only from trials you recorded.</p>
+          </div>
+          <div class="glass-card table-card">
+            <div class="table-head">
+              <h3>Recent trials</h3>
+              <button class="text-btn" id="clearHistoryBtn">Clear history</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>#</th><th>Actual</th><th>Prediction</th><th>Result</th><th>Time</th></tr></thead>
+                <tbody id="historyBody">
+                  <tr><td colspan="5" class="empty-row">No experiments recorded yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="guide">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">04 · KNOWLEDGE HUB</span>
+          <h2>Learn before you dispose</h2>
+          <p>Search the starter guide for practical segregation and disposal reminders.</p>
+        </div>
+        <div class="search-wrap">
+          <span>⌕</span>
+          <input id="guideSearch" placeholder="Search battery, plastic, charger..." />
+        </div>
+        <div class="guide-grid" id="guideGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="impact">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">05 · IMPACT CALCULATOR</span>
+          <h2>See your small actions add up</h2>
+        </div>
+        <div class="impact-grid">
+          <div class="glass-card calculator">
+            <label>Items responsibly segregated this month
+              <input type="number" id="impactItems" min="0" value="10" />
+            </label>
+            <label>Household e-waste pieces handled responsibly
+              <input type="number" id="impactEwaste" min="0" value="3" />
+            </label>
+            <button class="btn btn-primary full" id="calculateImpact">Calculate Impact</button>
+          </div>
+          <div class="glass-card impact-result">
+            <div class="impact-number" id="impactPoints">0</div>
+            <h3>Eco Points</h3>
+            <p id="impactText">Enter your activity and calculate a simple educational estimate.</p>
+            <div class="progress"><span id="impactProgress"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section alt" id="quiz">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">06 · MEGA QUIZ</span>
+          <h2>Test your eco knowledge</h2>
+          <p>15 quick questions. Your score is stored only in this browser.</p>
+        </div>
+        <div class="glass-card quiz-card">
+          <div class="quiz-top"><span id="quizCounter">Question 1 of 15</span><span id="quizScore">Score: 0</span></div>
+          <div class="progress quiz-progress"><span id="quizProgress"></span></div>
+          <h3 id="quizQuestion"></h3>
+          <div id="quizOptions" class="quiz-options"></div>
+          <div class="quiz-actions">
+            <button class="btn btn-primary" id="nextQuiz" disabled>Next →</button>
+            <button class="btn btn-ghost" id="restartQuiz" hidden>Restart Quiz</button>
+          </div>
+          <div id="quizFinal" class="quiz-final" hidden></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section challenges">
+      <div class="container">
+        <div class="challenge-banner glass-card">
+          <div>
+            <span class="eyebrow">🌱 ECO CHALLENGES</span>
+            <h2>Make the prototype a habit.</h2>
+            <p>Try one small action today: separate batteries, find an authorised collection point, or teach someone one e-waste fact.</p>
+          </div>
+          <button class="btn btn-primary" id="challengeBtn">Complete Challenge +10</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <img src="logo.svg" class="footer-logo" alt="EcoLens" />
+        <p>Identify • Segregate • Dispose</p>
+      </div>
+      <div>
+        <h4>EcoLens</h4>
+        <a href="#scanner">Scanner</a>
+        <a href="#experiment">Experiment Lab</a>
+        <a href="#guide">Knowledge Hub</a>
+      </div>
+      <div>
+        <h4>Project note</h4>
+        <p>This is an educational prototype. It does not claim universal AI recognition or replace local waste-management guidance.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 EcoLens · Built for environmental awareness and transparent experimentation.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
