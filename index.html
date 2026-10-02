@@ -111,7 +111,7 @@
             </div>
 
             <button class="btn btn-primary full" id="identifyBtn">🤖 Analyze Image</button>
-            <p class="micro-note">Run the AI analysis, then record the prediction against the actual item in the Experiment Lab.</p>
+            
           </div>
 
           <div class="glass-card detector-card">
@@ -119,12 +119,13 @@
               <div>
                 <span class="eyebrow">LIVE DETECTOR</span>
                 <h3>Wave over the waste</h3>
-                <p>Move the camera slowly over the waste and let the AI classifier analyze the live view.</p>
+                <p>Move the camera over the waste. AI object detection searches the live view for e-waste.</p>
               </div>
               <div class="detector-status" id="detectorStatus">READY</div>
             </div>
             <div class="detector-view" id="detectorView">
               <video id="detectorVideo" autoplay muted playsinline></video>
+              <canvas id="detectorOverlay"></canvas>
               <div class="scan-line"></div>
               <div class="scan-corners"></div>
               <div class="detector-center">
@@ -141,7 +142,7 @@
               <div class="meter-label"><span>Scan signal</span><b id="detectorSignal">0%</b></div>
               <div class="meter"><span id="detectorMeter"></span></div>
             </div>
-            <p class="detector-note">AI waste classification runs in your browser. A beep is triggered when the model detects a battery.</p>
+            
           </div>
 
           <div class="glass-card result-card" id="resultCard">
@@ -348,11 +349,11 @@
         <a href="#guide">Knowledge Hub</a>
       </div>
       <div>
-        <h4>Project note</h4>
+        <h4>EcoLens</h4>
         <p>Explore, test, learn, and make better waste-segregation choices.</p>
       </div>
     </div>
-    <div class="footer-bottom">© 2026 EcoLens · Built for environmental awareness and transparent experimentation.</div>
+    <div class="footer-bottom">© 2026 EcoLens · Identify • Segregate • Dispose.</div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort.min.js"></script>

@@ -1,5 +1,8 @@
 const MODEL_URL = "https://huggingface.co/SriramRokkam/wastewise-garbage-cls/resolve/main/wastewise-yolo.onnx";
 const MODEL_CLASSES = ["battery", "biological", "cardboard", "glass", "metal", "paper", "plastic", "trash"];
+const DETECTOR_MODEL_URL = "https://huggingface.co/kendrickfff/waste-classification-yolov8-ken/resolve/main/best.onnx";
+const DETECTOR_CLASSES = ["battery","biological","brown-glass","cardboard","clothes","green-glass","metal","paper","plastic","shoes","trash","white-glass"];
+const DETECTOR_CONFIDENCE = 0.45;
 
 const DATA = {
   battery:{name:"Battery",icon:"🔋",category:"E-Waste",risk:"High",recycle:"High",battery:"Yes",action:"Keep separate from regular household waste.",tip:"Follow your local authorised e-waste or battery collection system.",tags:["battery","cell","power"]},
@@ -43,6 +46,8 @@ let detectorBatteryLatchedAwarded = false;
 let detectorAudio = null;
 let aiSession = null;
 let aiLoading = null;
+let detectorSession = null;
+let detectorLoading = null;
 let lastPrediction = null;
 let quizIndex = 0, quizScore = 0, selectedAnswer = null;
 
@@ -158,6 +163,72 @@ async function classifySource(source){
   return {key:ranked[0].key,score:ranked[0].score,ranked};
 }
 
+async function getDetectorSession(){
+  if(detectorSession) return detectorSession;
+  if(detectorLoading) return detectorLoading;
+  if(!window.ort) throw new Error("ONNX Runtime did not load.");
+  detectorLoading=(async()=>{
+    const session=await ort.InferenceSession.create(DETECTOR_MODEL_URL,{executionProviders:["wasm"],graphOptimizationLevel:"all"});
+    detectorSession=session;
+    return session;
+  })();
+  try{return await detectorLoading;}finally{detectorLoading=null;}
+}
+
+function detectorTensor(source){
+  const size=640, canvas=document.createElement("canvas"); canvas.width=size; canvas.height=size;
+  const ctx=canvas.getContext("2d",{willReadFrequently:true});
+  ctx.drawImage(source,0,0,size,size);
+  const pixels=ctx.getImageData(0,0,size,size).data, plane=size*size;
+  const data=new Float32Array(3*plane);
+  for(let i=0;i<plane;i++){data[i]=pixels[i*4]/255;data[plane+i]=pixels[i*4+1]/255;data[2*plane+i]=pixels[i*4+2]/255;}
+  return new ort.Tensor("float32",data,[1,3,size,size]);
+}
+
+function detectorNms(boxes,iouThreshold=0.45){
+  boxes.sort((a,b)=>b.score-a.score); const keep=[];
+  while(boxes.length){const a=boxes.shift(); keep.push(a); boxes=boxes.filter(b=>{
+    const x1=Math.max(a.x1,b.x1),y1=Math.max(a.y1,b.y1),x2=Math.min(a.x2,b.x2),y2=Math.min(a.y2,b.y2);
+    const inter=Math.max(0,x2-x1)*Math.max(0,y2-y1);
+    const areaA=(a.x2-a.x1)*(a.y2-a.y1), areaB=(b.x2-b.x1)*(b.y2-b.y1);
+    const iou=inter/(areaA+areaB-inter+1e-6); return iou<iouThreshold;
+  });}
+  return keep;
+}
+
+async function detectObjects(source){
+  const session=await getDetectorSession();
+  const input=session.inputNames[0];
+  const out=await session.run({[input]:detectorTensor(source)});
+  const raw=out[session.outputNames[0]]; const dims=raw.dims; const d=Array.from(raw.data);
+  let rows=dims.length===3 && dims[1]<dims[2] ? dims[1] : dims[2];
+  const channels=dims.length===3 && dims[1]<dims[2] ? dims[2] : dims[1];
+  const boxes=[];
+  for(let r=0;r<rows;r++){
+    let cx,cy,w,h,base;
+    if(dims[1]<dims[2]){cx=d[r];cy=d[rows+r];w=d[2*rows+r];h=d[3*rows+r];base=4*rows+r;}
+    else{const off=r*channels;cx=d[off];cy=d[off+1];w=d[off+2];h=d[off+3];base=off+4;}
+    let best=-1,score=0;
+    for(let c=0;c<DETECTOR_CLASSES.length;c++){const v=d[base+c];if(v>score){score=v;best=c;}}
+    if(best>=0 && score>=DETECTOR_CONFIDENCE){boxes.push({x1:cx-w/2,y1:cy-h/2,x2:cx+w/2,y2:cy+h/2,score,key:DETECTOR_CLASSES[best]});}
+  }
+  return detectorNms(boxes);
+}
+
+function drawDetectorBoxes(boxes){
+  const video=$("detectorVideo"), canvas=$("detectorOverlay"); if(!canvas) return;
+  const rect=video.getBoundingClientRect(); const dpr=window.devicePixelRatio||1;
+  canvas.width=Math.max(1,Math.round(rect.width*dpr)); canvas.height=Math.max(1,Math.round(rect.height*dpr));
+  const ctx=canvas.getContext("2d"); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,rect.width,rect.height);
+  const vw=video.videoWidth||640,vh=video.videoHeight||640;
+  const scale=Math.max(rect.width/vw,rect.height/vh), dw=vw*scale,dh=vh*scale,ox=(rect.width-dw)/2,oy=(rect.height-dh)/2;
+  boxes.forEach(b=>{const x=ox+b.x1/640*dw,y=oy+b.y1/640*dh,w=(b.x2-b.x1)/640*dw,h=(b.y2-b.y1)/640*dh;
+    ctx.lineWidth=3;ctx.strokeStyle="#69ffb1";ctx.strokeRect(x,y,w,h);
+    ctx.fillStyle="rgba(3,15,10,.82)";const txt=`${label(b.key)} ${Math.round(b.score*100)}%`;
+    ctx.font="700 12px system-ui";const tw=ctx.measureText(txt).width+14;ctx.fillRect(x,y-24,tw,24);ctx.fillStyle="#69ffb1";ctx.fillText(txt,x+7,y-8);
+  });
+}
+
 function setImage(src){
   $("previewImage").src=src;
   $("previewImage").hidden=false;
@@ -233,7 +304,7 @@ $("recordBtn").addEventListener("click",()=>{
   const pred=$("useScannerPrediction").checked && lastPrediction ? lastPrediction.key : $("labPredictionSelect").value;
   history.push({actual,prediction:pred,correct:actual===pred,time:new Date().toISOString(),confidence:lastPrediction?.score ?? null});
   points+=actual===pred?10:3; save(); updateStats();
-  alert(actual===pred?"Trial recorded: Correct AI prediction!":"Trial recorded: Incorrect AI prediction. Keep the trial — it is useful experimental data.");
+  alert(actual===pred?"Trial recorded: Correct AI prediction!":"Trial recorded: Incorrect AI prediction.");
 });
 
 $("clearHistoryBtn").addEventListener("click",()=>{
@@ -266,57 +337,36 @@ function detectorSignal(v){
 }
 
 async function detectorScan(){
-  if(!detectorRunning || detectorBusy || !aiSession) return;
-  const video=$("detectorVideo");
-  if(video.readyState<2) return;
+  if(!detectorRunning || detectorBusy || !detectorSession) return;
+  const video=$("detectorVideo"); if(video.readyState<2) return;
   detectorBusy=true;
   try{
-    const result=await classifySource(video);
-    const confidence=result.score;
-    detectorSignal(confidence*100);
-    if(result.key==="battery" && confidence>=0.55){
-      if(!detectorRunning) return;
+    const boxes=await detectObjects(video);
+    drawDetectorBoxes(boxes);
+    const battery=boxes.filter(b=>b.key==="battery").sort((a,b)=>b.score-a.score)[0];
+    const strongest=boxes[0];
+    detectorSignal((battery||strongest)?.score*100||0);
+    if(battery){
       if(!detectorBatteryLatched) detectorBeep();
       detectorBatteryLatched=true;
-      $("detectorStatus").textContent="E-WASTE FOUND";
-      $("detectorStatus").classList.remove("active");
-      $("detectorStatus").classList.add("found");
-      $("detectorMessage").textContent="⚠ E-WASTE DETECTED";
-      $("detectorSub").textContent=`Battery · ${pct(confidence)} confidence`;
-      setResult(result.key,confidence);
-      lastPrediction=result;
-      setAiOptions(result.key);
-      if(!detectorBatteryLatchedAwarded){
-        points+=5; save(); updateStats();
-        detectorBatteryLatchedAwarded=true;
-      }
-      setTimeout(()=>{
-        if(detectorRunning){
-          $("detectorStatus").textContent="SCANNING";
-          $("detectorStatus").classList.remove("found");
-          $("detectorStatus").classList.add("active");
-          $("detectorMessage").textContent="Scanning…";
-          $("detectorSub").textContent="Move slowly across the waste";
-        }
-      },1200);
+      $("detectorStatus").textContent="E-WASTE FOUND"; $("detectorStatus").classList.remove("active"); $("detectorStatus").classList.add("found");
+      $("detectorMessage").textContent="⚠ E-WASTE DETECTED"; $("detectorSub").textContent=`Battery · ${pct(battery.score)} confidence`;
+      setResult("battery",battery.score); lastPrediction={key:"battery",score:battery.score}; setAiOptions("battery");
+      if(!detectorBatteryLatchedAwarded){points+=5;save();updateStats();detectorBatteryLatchedAwarded=true;}
     }else{
-      detectorBatteryLatched=false;
-      detectorBatteryLatchedAwarded=false;
-      $("detectorStatus").textContent="SCANNING";
-      $("detectorStatus").classList.add("active");
-      $("detectorStatus").classList.remove("found");
-      $("detectorMessage").textContent=`${label(result.key)} · ${pct(confidence)}`;
-      $("detectorSub").textContent="Analyzing the live camera frame";
+      detectorBatteryLatched=false;detectorBatteryLatchedAwarded=false;
+      $("detectorStatus").textContent="SCANNING";$("detectorStatus").classList.add("active");$("detectorStatus").classList.remove("found");
+      $("detectorMessage").textContent=strongest?`${label(strongest.key)} · ${pct(strongest.score)}`:"Searching…";
+      $("detectorSub").textContent="AI object detection is scanning the live view";
     }
-  }catch(err){
-    console.error(err);
-  }finally{ detectorBusy=false; }
+  }catch(err){console.error(err);}
+  finally{detectorBusy=false;}
 }
 
 async function startDetector(){
   if(detectorRunning){stopDetector();return;}
   try{
-    await getAiSession();
+    await getDetectorSession();
     detectorStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280},height:{ideal:720}},audio:false});
     $("detectorVideo").srcObject=detectorStream;
     detectorRunning=true;
@@ -340,6 +390,7 @@ function stopDetector(){
   if(detectorStream) detectorStream.getTracks().forEach(t=>t.stop());
   detectorStream=null;detectorTimer=null;detectorBusy=false;detectorBatteryLatched=false;detectorBatteryLatchedAwarded=false;
   $("detectorVideo").srcObject=null;
+  const overlay=$("detectorOverlay"); if(overlay){const ctx=overlay.getContext("2d");ctx.clearRect(0,0,overlay.width,overlay.height);}
   $("detectorBtn").textContent="📡 Start Detector";
   $("detectorStatus").textContent="READY";
   $("detectorStatus").classList.remove("active","found");

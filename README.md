@@ -1,39 +1,13 @@
-# EcoLens
+# EcoLens — Identify • Segregate • Dispose
 
-EcoLens — Identify • Segregate • Dispose
+EcoLens is a browser-based waste awareness application with AI image classification, live camera object detection, an experiment lab, educational content, an impact calculator and quiz features.
 
-## Features
-- Real camera and image upload
-- In-browser AI waste classification with ONNX Runtime Web
-- Live detector with audio alert for detected battery waste
-- AI confidence shown with each prediction
-- Actual item vs AI prediction tracking
-- Accuracy dashboard and CSV experiment export
-- Knowledge Hub with search
-- Impact Calculator
-- 15-question Mega Quiz
-- Eco Points and challenges
-- Responsive desktop and mobile design
-- Custom dark-aura EcoLens branding
-- robots.txt and sitemap.xml
+## Live detector
+The Live Detector uses an ONNX object-detection model through ONNX Runtime Web. It analyzes the live camera view, draws detection boxes, identifies battery objects, and gives an audio alert when a battery is detected with sufficient confidence.
 
-## AI model
-EcoLens uses the WasteWise Garbage Classifier in ONNX format. The model classifies eight waste classes: battery, biological, cardboard, glass, metal, paper, plastic, and trash.
+The detector model used for the live object-detection feature is the Waste Classification YOLOv8 model by Kendrick's Model v1, published on Hugging Face under CC BY 4.0. The model includes a battery class and other waste classes.
 
-The model runs in the browser, so the image is processed on the device instead of being uploaded to an EcoLens server.
+The separate image scanner continues to use the WasteWise 8-class ONNX classifier.
 
-## Files
-- `index.html` — website structure
-- `style.css` — visual design and responsive layout
-- `script.js` — AI scanner, live detector, experiments, dashboard, quiz and interactions
-- `logo.svg` — EcoLens logo
-- `robots.txt` — crawler settings
-- `sitemap.xml` — site map
-
-## GitHub Pages
-Upload the website files to the repository root.
-
-Keep any existing Google Search Console verification file in the repository.
-
-Site:
-https://legendishan540-star.github.io/EcoLens/
+## Deployment
+The project is a static website and can be deployed to GitHub Pages. Keep any existing Google Search Console verification file in the repository.
