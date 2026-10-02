@@ -119,13 +119,13 @@
               <div>
                 <span class="eyebrow">LIVE DETECTOR</span>
                 <h3>Wave over the waste</h3>
-                <p>Move the camera over the waste. AI object detection searches the live view for e-waste.</p>
+                <p>Move the camera over the waste. AI continuously analyzes the live camera view and alerts you when a battery is detected.</p>
               </div>
               <div class="detector-status" id="detectorStatus">READY</div>
             </div>
             <div class="detector-view" id="detectorView">
               <video id="detectorVideo" autoplay muted playsinline></video>
-              <canvas id="detectorOverlay"></canvas>
+              <canvas id="detectorOverlay" hidden></canvas>
               <div class="scan-line"></div>
               <div class="scan-corners"></div>
               <div class="detector-center">
