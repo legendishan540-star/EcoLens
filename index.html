@@ -40,9 +40,7 @@
           <span class="eyebrow">♻️ NCSC E-WASTE AWARENESS PROJECT</span>
           <h1>See Waste.<br><span>Think Green.</span></h1>
           <p class="hero-text">
-            EcoLens helps you explore waste categories, learn responsible disposal,
-            and run transparent classification experiments without pretending that a
-            prototype is a full AI system.
+            EcoLens helps you explore waste categories, learn responsible disposal, and run classification experiments.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="#scanner">🔎 Scan Waste</a>
@@ -57,7 +55,7 @@
             <div class="orb-core">♻</div>
           </div>
           <div class="float-card fc-one"><b>7</b><small>test categories</small></div>
-          <div class="float-card fc-two"><b>100%</b><small>transparent prototype</small></div>
+          <div class="float-card fc-two"><b>AI</b><small>in-browser classifier</small></div>
           <div class="float-card fc-three"><b>CSV</b><small>export your trials</small></div>
         </div>
       </div>
@@ -77,7 +75,7 @@
         <div class="section-heading">
           <span class="eyebrow">01 · SCANNER</span>
           <h2>Explore a waste item</h2>
-          <p>Upload a photo or use your camera. Select the prototype category you want to test.</p>
+          <p>Upload a photo or use your camera. EcoLens runs the waste classifier directly in your browser.</p>
         </div>
 
         <div class="scanner-grid">
@@ -104,21 +102,46 @@
 
             <div class="field-row">
               <label>
-                Experimental prediction
-                <select id="predictionSelect">
-                  <option value="battery">Battery</option>
-                  <option value="charger">Charger</option>
-                  <option value="phone">Mobile phone</option>
-                  <option value="cable">Cable</option>
-                  <option value="plastic">Plastic bottle</option>
-                  <option value="paper">Paper</option>
-                  <option value="organic">Organic / wet waste</option>
+                AI prediction
+                <select id="predictionSelect" disabled>
+                  <option value="battery">Waiting for AI...</option>
                 </select>
+                <span id="aiStatus" class="ai-status">AI model loads when you analyze an image or start the detector</span>
               </label>
             </div>
 
-            <button class="btn btn-primary full" id="identifyBtn">🔍 Identify for Experiment</button>
-            <p class="micro-note">Prototype note: this static version does not claim to perform AI image recognition. The selected category is recorded as the app prediction for NCSC experimentation.</p>
+            <button class="btn btn-primary full" id="identifyBtn">🤖 Analyze Image</button>
+            <p class="micro-note">Run the AI analysis, then record the prediction against the actual item in the Experiment Lab.</p>
+          </div>
+
+          <div class="glass-card detector-card">
+            <div class="detector-head">
+              <div>
+                <span class="eyebrow">LIVE DETECTOR</span>
+                <h3>Wave over the waste</h3>
+                <p>Move the camera slowly over the waste and let the AI classifier analyze the live view.</p>
+              </div>
+              <div class="detector-status" id="detectorStatus">READY</div>
+            </div>
+            <div class="detector-view" id="detectorView">
+              <video id="detectorVideo" autoplay muted playsinline></video>
+              <div class="scan-line"></div>
+              <div class="scan-corners"></div>
+              <div class="detector-center">
+                <span id="detectorIcon">⌁</span>
+                <b id="detectorMessage">Start detector</b>
+                <small id="detectorSub">Point the camera at the waste</small>
+              </div>
+            </div>
+            <div class="detector-controls">
+              <button class="btn btn-primary" id="detectorBtn">📡 Start Detector</button>
+              <button class="btn btn-ghost" id="detectorTestBtn">🔔 Test Beep</button>
+            </div>
+            <div class="detector-meter">
+              <div class="meter-label"><span>Scan signal</span><b id="detectorSignal">0%</b></div>
+              <div class="meter"><span id="detectorMeter"></span></div>
+            </div>
+            <p class="detector-note">AI waste classification runs in your browser. A beep is triggered when the model detects a battery.</p>
           </div>
 
           <div class="glass-card result-card" id="resultCard">
@@ -158,12 +181,13 @@
               <label>Actual item
                 <select id="actualSelect">
                   <option value="battery">Battery</option>
-                  <option value="charger">Charger</option>
-                  <option value="phone">Mobile phone</option>
-                  <option value="cable">Cable</option>
-                  <option value="plastic">Plastic bottle</option>
+                  <option value="biological">Organic / biological waste</option>
+                  <option value="cardboard">Cardboard</option>
+                  <option value="glass">Glass</option>
+                  <option value="metal">Metal</option>
                   <option value="paper">Paper</option>
-                  <option value="organic">Organic / wet waste</option>
+                  <option value="plastic">Plastic</option>
+                  <option value="trash">General waste</option>
                 </select>
               </label>
               <label>Prediction
@@ -180,7 +204,7 @@
             </div>
             <label class="check-row">
               <input type="checkbox" id="useScannerPrediction" checked />
-              <span>Use the scanner's selected prediction</span>
+              <span>Use the latest AI prediction</span>
             </label>
             <button class="btn btn-primary full" id="recordBtn">＋ Record Experiment</button>
           </div>
@@ -189,8 +213,7 @@
             <span class="mini-label">WHY IT MATTERS</span>
             <h3>Measure, don't exaggerate.</h3>
             <p>
-              A school prototype becomes more useful when its limitations are visible.
-              These records let you calculate simple accuracy from your own test set.
+              These records let you compare AI predictions with the actual item and calculate accuracy from your own test set.
             </p>
             <div class="mini-stats">
               <div><b id="correctCount">0</b><span>correct</span></div>
@@ -303,7 +326,7 @@
         <div class="challenge-banner glass-card">
           <div>
             <span class="eyebrow">🌱 ECO CHALLENGES</span>
-            <h2>Make the prototype a habit.</h2>
+            <h2>Make better waste habits stick.</h2>
             <p>Try one small action today: separate batteries, find an authorised collection point, or teach someone one e-waste fact.</p>
           </div>
           <button class="btn btn-primary" id="challengeBtn">Complete Challenge +10</button>
@@ -326,12 +349,13 @@
       </div>
       <div>
         <h4>Project note</h4>
-        <p>This is an educational prototype. It does not claim universal AI recognition or replace local waste-management guidance.</p>
+        <p>Explore, test, learn, and make better waste-segregation choices.</p>
       </div>
     </div>
     <div class="footer-bottom">© 2026 EcoLens · Built for environmental awareness and transparent experimentation.</div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/ort.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

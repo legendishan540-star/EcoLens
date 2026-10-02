@@ -1,25 +1,39 @@
-# EcoLens — V2.0 + NCSC Features
+# EcoLens
 
-This package preserves the V2.0 dark eco-tech/glass design direction while adding:
-- Live camera and image upload
-- Limited 7-category experiment set
-- Transparent prototype wording (no fake AI/confidence)
-- Actual item vs prediction experiment logging
-- Accuracy dashboard
-- CSV export
-- Knowledge hub search
-- Impact calculator
-- 15-question quiz
-- Eco Points and challenge
-- Responsive desktop + mobile layout
-- Custom dark-aura EcoLens SVG logo
+EcoLens — Identify • Segregate • Dispose
+
+## Features
+- Real camera and image upload
+- In-browser AI waste classification with ONNX Runtime Web
+- Live detector with audio alert for detected battery waste
+- AI confidence shown with each prediction
+- Actual item vs AI prediction tracking
+- Accuracy dashboard and CSV experiment export
+- Knowledge Hub with search
+- Impact Calculator
+- 15-question Mega Quiz
+- Eco Points and challenges
+- Responsive desktop and mobile design
+- Custom dark-aura EcoLens branding
 - robots.txt and sitemap.xml
 
-## Important
-This is a static educational prototype. It does **not** claim to perform real AI image recognition. The selected category is treated as the prototype prediction so you can collect and analyze test data.
+## AI model
+EcoLens uses the WasteWise Garbage Classifier in ONNX format. The model classifies eight waste classes: battery, biological, cardboard, glass, metal, paper, plastic, and trash.
+
+The model runs in the browser, so the image is processed on the device instead of being uploaded to an EcoLens server.
+
+## Files
+- `index.html` — website structure
+- `style.css` — visual design and responsive layout
+- `script.js` — AI scanner, live detector, experiments, dashboard, quiz and interactions
+- `logo.svg` — EcoLens logo
+- `robots.txt` — crawler settings
+- `sitemap.xml` — site map
 
 ## GitHub Pages
-Upload these files to the repository root. Keep any existing Google Search Console verification HTML file in the root untouched.
+Upload the website files to the repository root.
 
-Expected site:
+Keep any existing Google Search Console verification file in the repository.
+
+Site:
 https://legendishan540-star.github.io/EcoLens/
